@@ -17,7 +17,7 @@ plugins {
 }
 
 group = "hexlet.code"
-version = "0.0.1"
+version = "0.0.1-SNAPSHOT"
 
 java {
     toolchain {
@@ -35,6 +35,8 @@ repositories {
 
 dependencies {
     implementation(libs.bundles.spring.boot)
+    implementation(libs.postgresql)
+    runtimeOnly(libs.h2database)
 }
 
 tasks.test {
