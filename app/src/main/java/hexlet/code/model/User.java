@@ -3,8 +3,8 @@ package hexlet.code.model;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
+import jakarta.persistence.EntityListeners;
 import jakarta.validation.constraints.NotNull;
-import org.hibernate.annotations.ColumnDefault;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
@@ -16,8 +16,10 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Entity
+@EntityListeners(AuditingEntityListener.class)
 @Table(name = "users")
 public class User implements BaseEntity {
 
@@ -25,11 +27,11 @@ public class User implements BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank
-    private String firstName;
+    @NotNull
+    private String firstName = "";
 
-    @NotBlank
-    private String lastName;
+    @NotNull
+    private String lastName = "";
 
     @NotBlank
     @Email
@@ -38,20 +40,20 @@ public class User implements BaseEntity {
 
     private String passwordDigest;
 
-    @NotNull
-    @ColumnDefault("NOW()")
     @CreatedDate
     private LocalDateTime createdAt;
 
-    @NotNull
-    @ColumnDefault("NOW()")
     @LastModifiedDate
     private LocalDateTime updatedAt;
 
     @Override
     public boolean equals(Object object) {
-        if (this == object) return true;
-        if (!(object instanceof User user)) return false;
+        if (this == object) {
+            return true;
+        }
+        if (!(object instanceof User user)) {
+            return false;
+        }
         return Objects.equals(getId(), user.getId());
     }
 
@@ -96,7 +98,7 @@ public class User implements BaseEntity {
         return passwordDigest;
     }
 
-    public void setPassword(String password) {
+    public void setPasswordDigest(String password) {
         this.passwordDigest = password;
     }
 
@@ -115,6 +117,5 @@ public class User implements BaseEntity {
     public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
     }
-
 
 }

@@ -36,7 +36,14 @@ repositories {
 dependencies {
     implementation(libs.bundles.spring.boot)
     implementation(libs.postgresql)
+
+    implementation(libs.mapstruct)
+    implementation(libs.jackson.databind.nullable)
+    annotationProcessor(libs.mapstruct.processor)
+
+    implementation(libs.datafaker)
     runtimeOnly(libs.h2database)
+    testImplementation(libs.bundles.spring.boot.testing)
 }
 
 tasks.test {
