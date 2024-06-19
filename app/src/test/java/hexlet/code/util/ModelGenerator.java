@@ -1,5 +1,6 @@
 package hexlet.code.util;
 
+import hexlet.code.model.TaskStatus;
 import hexlet.code.model.User;
 import net.datafaker.Faker;
 import org.instancio.Instancio;
@@ -20,6 +21,16 @@ public final class ModelGenerator {
             .supply(Select.field(User::getFirstName), () -> faker.name().firstName())
             .supply(Select.field(User::getLastName), () -> faker.name().lastName())
             .supply(Select.field(User::getEmail), () -> faker.internet().emailAddress())
+            .toModel();
+    }
+
+    public Model<TaskStatus> taskStatusModel() {
+        var name = faker.regexify("\\w{5,15}");
+        var slug = name.toLowerCase();
+        return Instancio.of(TaskStatus.class)
+            .ignore(Select.field(TaskStatus::getId))
+            .supply(Select.field(TaskStatus::getName), () -> name)
+            .supply(Select.field(TaskStatus::getSlug), () -> slug)
             .toModel();
     }
 
