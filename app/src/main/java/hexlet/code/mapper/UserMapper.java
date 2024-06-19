@@ -12,7 +12,7 @@ import org.mapstruct.MappingTarget;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 import org.mapstruct.ReportingPolicy;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Mapper(
     uses = {JsonNullableMapper.class},
@@ -22,7 +22,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 )
 public abstract class UserMapper {
 
-    private final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+    @Autowired
+    private PasswordEncoder encoder;
 
     @Autowired
     private JsonNullableMapper jsonNullableMapper;

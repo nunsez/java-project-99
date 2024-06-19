@@ -8,6 +8,7 @@ json-unit-assertj = "3.2.7"
 datafaker = "2.2.2"
 instancio-junit = "4.8.0"
 slf4j = "2.0.13"
+spring = "6.3.1"
 spring-boot = "3.3.0"
 h2database = "2.2.224"
 postgresql = "42.7.3"
@@ -25,8 +26,10 @@ spring-boot-starter-web = { group = "org.springframework.boot", name = "spring-b
 spring-boot-starter-data-jpa = { group = "org.springframework.boot", name = "spring-boot-starter-data-jpa", version.ref = "spring-boot" }
 spring-boot-starter-validation = { group = "org.springframework.boot", name = "spring-boot-starter-validation", version.ref = "spring-boot" }
 spring-boot-starter-security = { group = "org.springframework.boot", name = "spring-boot-starter-security", version.ref = "spring-boot" }
+spring-boot-starter-oauth2-resource-server = { group = "org.springframework.boot", name = "spring-boot-starter-oauth2-resource-server", version.ref = "spring-boot" }
 spring-boot-devtools = { group = "org.springframework.boot", name = "spring-boot-devtools", version.ref = "spring-boot" }
 spring-boot-starter-test = { group = "org.springframework.boot", name = "spring-boot-starter-test", version.ref = "spring-boot" }
+spring-security-test = { group = "org.springframework.security", name = "spring-security-test", version.ref = "spring" }
 h2database = { group = "com.h2database", name = "h2", version.ref = "h2database" }
 postgresql = { group = "org.postgresql", name = "postgresql", version.ref = "postgresql" }
 mapstruct = { group = "org.mapstruct", name = "mapstruct", version.ref = "mapstruct" }
@@ -42,11 +45,13 @@ spring-boot = [
     "spring-boot-starter-data-jpa",
     "spring-boot-starter-validation",
     "spring-boot-starter-security",
+    "spring-boot-starter-oauth2-resource-server",
     "spring-boot-devtools"
 ]
 spring-boot-testing = [
     "junit-jupiter",
     "json-unit-assertj",
     "spring-boot-starter-test",
+    "spring-security-test",
     "instancio-junit"
 ]

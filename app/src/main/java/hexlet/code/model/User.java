@@ -1,6 +1,8 @@
 package hexlet.code.model;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Objects;
 
 import jakarta.persistence.EntityListeners;
@@ -17,11 +19,13 @@ import jakarta.persistence.Table;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 @Entity
 @EntityListeners(AuditingEntityListener.class)
 @Table(name = "users")
-public class User implements BaseEntity {
+public class User implements BaseEntity, UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -94,6 +98,7 @@ public class User implements BaseEntity {
         this.email = email;
     }
 
+    @Override
     public String getPassword() {
         return passwordDigest;
     }
@@ -116,6 +121,16 @@ public class User implements BaseEntity {
 
     public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return new ArrayList<>();
+    }
+
+    @Override
+    public String getUsername() {
+        return email;
     }
 
 }
