@@ -1,7 +1,5 @@
 package hexlet.code.dto;
 
-import java.time.LocalDateTime;
-
 public final class UserDTO {
 
     private Long id;
@@ -12,7 +10,7 @@ public final class UserDTO {
 
     private String email;
 
-    private LocalDateTime createdAt;
+    private String createdAt;
 
     public Long getId() {
         return id;
@@ -46,11 +44,11 @@ public final class UserDTO {
         this.email = email;
     }
 
-    public LocalDateTime getCreatedAt() {
+    public String getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(LocalDateTime createdAt) {
+    public void setCreatedAt(String createdAt) {
         this.createdAt = createdAt;
     }
 
