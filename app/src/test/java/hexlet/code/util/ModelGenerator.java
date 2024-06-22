@@ -1,5 +1,6 @@
 package hexlet.code.util;
 
+import hexlet.code.model.Task;
 import hexlet.code.model.TaskStatus;
 import hexlet.code.model.User;
 import net.datafaker.Faker;
@@ -31,6 +32,14 @@ public final class ModelGenerator {
             .ignore(Select.field(TaskStatus::getId))
             .supply(Select.field(TaskStatus::getName), () -> name)
             .supply(Select.field(TaskStatus::getSlug), () -> slug)
+            .toModel();
+    }
+
+    public Model<Task> taskModel() {
+        return Instancio.of(Task.class)
+            .ignore(Select.field(Task::getId))
+            .supply(Select.field(Task::getAssignee), () -> Instancio.create(userModel()))
+            .supply(Select.field(Task::getTaskStatus), () -> Instancio.create(taskStatusModel()))
             .toModel();
     }
 
