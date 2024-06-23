@@ -2,9 +2,11 @@ package hexlet.code.controller.api;
 
 import hexlet.code.dto.TaskCreateDTO;
 import hexlet.code.dto.TaskDTO;
+import hexlet.code.dto.TaskParamsDTO;
 import hexlet.code.dto.TaskUpdateDTO;
 import hexlet.code.mapper.TaskMapper;
 import hexlet.code.repository.TaskRepository;
+import hexlet.code.specification.TaskSpecification;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,9 +34,13 @@ public final class TaskController {
     @Autowired
     private TaskMapper taskMapper;
 
+    @Autowired
+    private TaskSpecification taskSpecification;
+
     @GetMapping
-    ResponseEntity<List<TaskDTO>> index() {
-        var tasks = taskRepository.findAll();
+    ResponseEntity<List<TaskDTO>> index(TaskParamsDTO params) {
+        var spec = taskSpecification.build(params);
+        var tasks = taskRepository.findAll(spec);
         var body = tasks.stream().map(taskMapper::map).toList();
         return ResponseEntity.ok()
             .header("X-Total-Count", Integer.toString(body.size()))
