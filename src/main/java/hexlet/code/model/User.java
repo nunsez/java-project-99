@@ -3,7 +3,6 @@ package hexlet.code.model;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Objects;
 
 import jakarta.persistence.EntityListeners;
 import jakarta.validation.constraints.NotNull;
@@ -17,7 +16,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -37,7 +35,6 @@ public class User implements BaseEntity, UserDetails {
     @NotNull
     private String lastName = "";
 
-    @NotBlank
     @Email
     @Column(unique = true)
     private String email;
@@ -49,22 +46,6 @@ public class User implements BaseEntity, UserDetails {
 
     @LastModifiedDate
     private LocalDateTime updatedAt;
-
-    @Override
-    public boolean equals(Object object) {
-        if (this == object) {
-            return true;
-        }
-        if (!(object instanceof User user)) {
-            return false;
-        }
-        return Objects.equals(getId(), user.getId());
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hashCode(getId());
-    }
 
     public Long getId() {
         return id;

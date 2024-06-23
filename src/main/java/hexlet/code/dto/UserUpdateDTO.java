@@ -2,23 +2,20 @@ package hexlet.code.dto;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 import org.openapitools.jackson.nullable.JsonNullable;
 
 public final class UserUpdateDTO {
 
-    @NotNull
     private JsonNullable<String> firstName;
 
-    @NotNull
     private JsonNullable<String> lastName;
 
-    @NotNull
     @Email
     private JsonNullable<String> email;
 
     @NotNull
-    @Pattern(regexp = ".{3,}")
+    @Size(min = 3)
     private JsonNullable<String> password;
 
     public JsonNullable<String> getFirstName() {
