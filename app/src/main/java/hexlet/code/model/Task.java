@@ -1,11 +1,15 @@
 package hexlet.code.model;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
@@ -15,6 +19,8 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @EntityListeners(AuditingEntityListener.class)
@@ -45,6 +51,14 @@ public final class Task implements BaseEntity {
 
     @LastModifiedDate
     private LocalDateTime updatedAt;
+
+    @ManyToMany
+    @JoinTable(
+        name = "tasks_labels",
+        joinColumns = @JoinColumn(name = "task_id", nullable = false),
+        inverseJoinColumns = @JoinColumn(name = "label_id", nullable = false)
+    )
+    private Set<Label> labels = new HashSet<>();
 
     public Long getId() {
         return id;
@@ -108,6 +122,14 @@ public final class Task implements BaseEntity {
 
     public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    public Set<Label> getLabels() {
+        return labels;
+    }
+
+    public void setLabels(Set<Label> labels) {
+        this.labels = labels;
     }
 
 }

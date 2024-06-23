@@ -1,5 +1,6 @@
 package hexlet.code.util;
 
+import hexlet.code.model.Label;
 import hexlet.code.model.Task;
 import hexlet.code.model.TaskStatus;
 import hexlet.code.model.User;
@@ -9,6 +10,9 @@ import org.instancio.Model;
 import org.instancio.Select;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import java.util.HashSet;
+import java.util.Set;
 
 @Component
 public final class ModelGenerator {
@@ -40,6 +44,13 @@ public final class ModelGenerator {
             .ignore(Select.field(Task::getId))
             .supply(Select.field(Task::getAssignee), () -> Instancio.create(userModel()))
             .supply(Select.field(Task::getTaskStatus), () -> Instancio.create(taskStatusModel()))
+            .supply(Select.field(Task::getLabels), () -> Set.of(Instancio.create(labelModel())))
+            .toModel();
+    }
+
+    public Model<Label> labelModel() {
+        return Instancio.of(Label.class)
+            .ignore(Select.field(Label::getId))
             .toModel();
     }
 

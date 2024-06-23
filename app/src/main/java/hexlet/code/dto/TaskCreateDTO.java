@@ -5,6 +5,8 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import org.openapitools.jackson.nullable.JsonNullable;
 
+import java.util.Set;
+
 public final class TaskCreateDTO {
 
     private Integer index;
@@ -21,6 +23,8 @@ public final class TaskCreateDTO {
 
     @NotNull
     private String status;
+
+    private Set<Long> taskLabelIds;
 
     public Integer getIndex() {
         return index;
@@ -60,6 +64,14 @@ public final class TaskCreateDTO {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public Set<Long> getTaskLabelIds() {
+        return taskLabelIds;
+    }
+
+    public void setTaskLabelIds(Set<Long> taskLabelIds) {
+        this.taskLabelIds = taskLabelIds;
     }
 
 }

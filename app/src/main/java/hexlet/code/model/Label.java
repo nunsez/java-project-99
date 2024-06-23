@@ -6,8 +6,10 @@ import jakarta.persistence.EntityListeners;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -16,23 +18,18 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import java.time.LocalDateTime;
 
 @Entity
+@Table(name = "labels")
 @EntityListeners(AuditingEntityListener.class)
-@Table(name = "task_statuses")
-public final class TaskStatus implements BaseEntity {
+public final class Label {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull
-    @Size(min = 1)
-    @Column(unique = true)
+    @NotBlank
+    @Size(min = 3, max = 1000)
+    @Column(columnDefinition = "TEXT", unique = true)
     private String name;
-
-    @NotNull
-    @Size(min = 1)
-    @Column(unique = true)
-    private String slug;
 
     @CreatedDate
     private LocalDateTime createdAt;
@@ -54,14 +51,6 @@ public final class TaskStatus implements BaseEntity {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getSlug() {
-        return slug;
-    }
-
-    public void setSlug(String slug) {
-        this.slug = slug;
     }
 
     public LocalDateTime getCreatedAt() {

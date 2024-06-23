@@ -1,8 +1,8 @@
 package hexlet.code.controller.api;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import hexlet.code.model.TaskStatus;
-import hexlet.code.repository.TaskStatusRepository;
+import hexlet.code.model.Label;
+import hexlet.code.repository.LabelRepository;
 import hexlet.code.util.ModelGenerator;
 import org.instancio.Instancio;
 import org.junit.jupiter.api.BeforeEach;
@@ -28,7 +28,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
-class TaskStatusControllerTest {
+class LabelControllerTest {
 
     @Autowired
     private WebApplicationContext wac;
@@ -37,14 +37,14 @@ class TaskStatusControllerTest {
     private ModelGenerator modelGenerator;
 
     @Autowired
-    private TaskStatusRepository taskStatusRepository;
+    private LabelRepository labelRepository;
 
     @Autowired
     private ObjectMapper objectMapper;
 
     private MockMvc mockMvc;
 
-    private TaskStatus testTaskStatus;
+    private Label testLabel;
 
     @BeforeEach
     public void beforeEach() {
@@ -54,50 +54,49 @@ class TaskStatusControllerTest {
             .apply(springSecurity())
             .build();
 
-        testTaskStatus = Instancio.create(modelGenerator.taskStatusModel());
+        testLabel = Instancio.create(modelGenerator.labelModel());
     }
 
     @Test
     public void testIndexUnauthorized() throws Exception {
-        mockMvc.perform(get("/api/task_statuses"))
+        mockMvc.perform(get("/api/labels"))
             .andExpect(status().isUnauthorized());
     }
 
     @Test
     @WithMockUser
     public void testIndex() throws Exception {
-        mockMvc.perform(get("/api/task_statuses"))
+        mockMvc.perform(get("/api/labels"))
             .andExpect(status().isOk());
     }
 
     @Test
     public void testShowUnauthorized() throws Exception {
-        taskStatusRepository.save(testTaskStatus);
-        mockMvc.perform(get("/api/task_statuses/" + testTaskStatus.getId()))
+        labelRepository.save(testLabel);
+        mockMvc.perform(get("/api/labels/" + testLabel.getId()))
             .andExpect(status().isUnauthorized());
     }
 
     @Test
     @WithMockUser
     public void testShow() throws Exception {
-        taskStatusRepository.save(testTaskStatus);
-        var response = mockMvc.perform(get("/api/task_statuses/" + testTaskStatus.getId()))
+        labelRepository.save(testLabel);
+        var response = mockMvc.perform(get("/api/labels/" + testLabel.getId()))
             .andExpect(status().isOk())
             .andReturn();
         var body = response.getResponse().getContentAsString();
 
         assertThatJson(body).and(
-            v -> v.node("id").isEqualTo(testTaskStatus.getId()),
-            v -> v.node("name").isEqualTo(testTaskStatus.getName()),
-            v -> v.node("slug").isEqualTo(testTaskStatus.getSlug())
+            v -> v.node("id").isEqualTo(testLabel.getId()),
+            v -> v.node("name").isEqualTo(testLabel.getName())
         );
     }
 
     @Test
     public void testCreateUnauthorized() throws Exception {
-        var request = post("/api/task_statuses")
+        var request = post("/api/labels")
             .contentType(MediaType.APPLICATION_JSON)
-            .content(objectMapper.writeValueAsString(testTaskStatus));
+            .content(objectMapper.writeValueAsString(testLabel));
         mockMvc.perform(request)
             .andExpect(status().isUnauthorized())
             .andReturn();
@@ -106,28 +105,27 @@ class TaskStatusControllerTest {
     @Test
     @WithMockUser
     public void testCreate() throws Exception {
-        var json = objectMapper.writeValueAsString(testTaskStatus);
-        var request = post("/api/task_statuses")
+        var json = objectMapper.writeValueAsString(testLabel);
+        var request = post("/api/labels")
             .contentType(MediaType.APPLICATION_JSON)
             .content(json);
         var response = mockMvc.perform(request)
             .andExpect(status().isCreated())
             .andReturn();
         var body = response.getResponse().getContentAsString();
-        var taskStatus = taskStatusRepository.findBySlug(testTaskStatus.getSlug()).get();
+        var label = labelRepository.findByName(testLabel.getName()).get();
 
         assertThatJson(body).and(
-            v -> v.node("id").isEqualTo(taskStatus.getId()),
-            v -> v.node("name").isEqualTo(taskStatus.getName()),
-            v -> v.node("slug").isEqualTo(taskStatus.getSlug())
+            v -> v.node("id").isEqualTo(label.getId()),
+            v -> v.node("name").isEqualTo(label.getName())
         );
     }
 
     @Test
     public void testUpdateUnauthorized() throws Exception {
-        taskStatusRepository.save(testTaskStatus);
+        labelRepository.save(testLabel);
         var data = Map.of("name", "FooBar");
-        var request = put("/api/task_statuses/" + testTaskStatus.getId())
+        var request = put("/api/labels/" + testLabel.getId())
             .contentType(MediaType.APPLICATION_JSON)
             .content(objectMapper.writeValueAsString(data));
         mockMvc.perform(request)
@@ -137,45 +135,44 @@ class TaskStatusControllerTest {
     @Test
     @WithMockUser
     public void testUpdate() throws Exception {
-        taskStatusRepository.save(testTaskStatus);
+        labelRepository.save(testLabel);
         var data = Map.of("name", "FooBar");
-        var request = put("/api/task_statuses/" + testTaskStatus.getId())
+        var request = put("/api/labels/" + testLabel.getId())
             .contentType(MediaType.APPLICATION_JSON)
             .content(objectMapper.writeValueAsString(data));
         var response = mockMvc.perform(request)
             .andExpect(status().isOk())
             .andReturn();
-        var taskStatus = taskStatusRepository.findById(testTaskStatus.getId()).get();
-        assertThat(taskStatus.getName()).isEqualTo("FooBar");
+        var label = labelRepository.findById(testLabel.getId()).get();
+        assertThat(label.getName()).isEqualTo("FooBar");
 
         var body = response.getResponse().getContentAsString();
         assertThatJson(body).and(
-            v -> v.node("id").isEqualTo(taskStatus.getId()),
-            v -> v.node("name").isEqualTo("FooBar"),
-            v -> v.node("slug").isEqualTo(taskStatus.getSlug())
+            v -> v.node("id").isEqualTo(label.getId()),
+            v -> v.node("name").isEqualTo("FooBar")
         );
     }
 
     @Test
     public void testDestroyUnauthorized() throws Exception {
-        taskStatusRepository.save(testTaskStatus);
-        var request = delete("/api/task_statuses/" + testTaskStatus.getId());
+        labelRepository.save(testLabel);
+        var request = delete("/api/labels/" + testLabel.getId());
         mockMvc.perform(request)
             .andExpect(status().isUnauthorized());
 
-        var taskStatus = taskStatusRepository.findById(testTaskStatus.getId());
-        assertThat(taskStatus).isPresent();
+        var label = labelRepository.findById(testLabel.getId());
+        assertThat(label).isPresent();
     }
 
     @Test
     @WithMockUser
     public void testDestroy() throws Exception {
-        taskStatusRepository.save(testTaskStatus);
-        var request = delete("/api/task_statuses/" + testTaskStatus.getId());
+        labelRepository.save(testLabel);
+        var request = delete("/api/labels/" + testLabel.getId());
         mockMvc.perform(request)
             .andExpect(status().isNoContent());
-        var taskStatus = taskStatusRepository.findById(testTaskStatus.getId());
-        assertThat(taskStatus).isEmpty();
+        var label = labelRepository.findById(testLabel.getId());
+        assertThat(label).isEmpty();
     }
 
 }
